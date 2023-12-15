@@ -11,8 +11,9 @@ import '../css/styles.css';
 
 // DOM LINKS
 const galleryEl = document.querySelector('.gallery');
-const searchInputEl = document.querySelector('input[name="searchQuery"');
+const searchInputEl = document.querySelector('input[name="searchQuery"]');
 const searchFormEl = document.getElementById('search-form');
+const loadText = document.querySelector('.text')
 
 ///////////////////////////////////////////////////////////////
 
@@ -73,8 +74,9 @@ function renderGallery(hits) {
   //   If the user has reached the end of the collection
   if (options.params.page * options.params.per_page >= totalHits) {
     if (!reachedEnd) {
+      loadText.classList.replace('loader','end-loader');
       Notify.info("We're sorry, but you've reached the end of search results.");
-      galleryEl.insertAdjacentHTML('beforeend','<p class="end-load">Sorry, there are no images matching your search query. Please try again.</p>');
+      loadText.textContent  = 'Sorry, there are no images matching your search query. Please try again.';
       reachedEnd = true;
     }
   }
@@ -85,7 +87,6 @@ function renderGallery(hits) {
 
 async function handleSubmit(e) {
   e.preventDefault();
-  console.log(e);
   options.params.q = searchInputEl.value.trim();
   if (options.params.q === '') {
     return;
@@ -120,6 +121,9 @@ searchFormEl.addEventListener('submit', handleSubmit);
 async function loadMore() {
   options.params.page += 1;
   try {
+    if(loadText.className === 'text'){
+      loadText.classList.add('loader');
+    }
     const response = await axios.get(BASE_URL, options);
     const hits = response.data.hits;
     renderGallery(hits);
