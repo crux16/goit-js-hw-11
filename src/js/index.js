@@ -87,6 +87,8 @@ function renderGallery(hits) {
 
 async function handleSubmit(e) {
   e.preventDefault();
+  loadText.classList.remove('end-loader');
+  loadText.textContent = '';
   options.params.q = searchInputEl.value.trim();
   if (options.params.q === '') {
     return;
