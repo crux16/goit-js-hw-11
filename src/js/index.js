@@ -46,7 +46,7 @@ function renderGallery(hits) {
         return `
               <a href="${largeImageURL}" class="lightbox">
                   <div class="photo-card">
-                      <img src="${webformatURL}" alt="${tags}" loading="lazy" data-user='<p>categories: ${tags}</p>posted by: <b class="user">${user}</b>'/>
+                      <img src="${webformatURL}" alt="${tags}" loading="lazy" data-user="posted by: ${user}"/>
                       <div class="info">
                           <p class="info-item" title='likes'>
                               <b class='icon-size'>👍</b>
