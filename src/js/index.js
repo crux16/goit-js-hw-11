@@ -23,7 +23,10 @@ const lightbox = new SimpleLightbox('.lightbox', {
   captionDelay: 250,
 });
 
+
+
 ///////////////////////////////////////////////////////////////
+let onceNotify = 0;
 let totalHits = 0;
 let reachedEnd = false;
 
@@ -90,6 +93,9 @@ async function handleSubmit(e) {
   loadText.classList.remove('end-loader');
   loadText.textContent = '';
   options.params.q = searchInputEl.value.trim();
+  if(loadText.className === 'text'){
+    loadText.classList.add('loader');
+  }
   if (options.params.q === '') {
     return;
   }
@@ -107,6 +113,9 @@ async function handleSubmit(e) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+      setTimeout(()=>{
+        loadText.classList.remove('loader');
+      },500);
     } else {
       Notify.success(`Hooray! We found ${totalHits} images.`);
       renderGallery(hits);
@@ -123,14 +132,12 @@ searchFormEl.addEventListener('submit', handleSubmit);
 async function loadMore() {
   options.params.page += 1;
   try {
-    if(loadText.className === 'text'){
-      loadText.classList.add('loader');
-    }
     const response = await axios.get(BASE_URL, options);
     const hits = response.data.hits;
     renderGallery(hits);
   } catch (err) {
-    Notify.failure(err);
+    loadText.classList.remove('loader');
+    Notify.failure('You reached the limit!');
   }
 }
 
